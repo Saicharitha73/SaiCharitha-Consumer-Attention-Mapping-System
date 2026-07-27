@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATTENTIO Retail Intelligence Dashboard</title>
+  <style>
+    :root {
+      --bg: #08101f;
+      --panel: #111c2b;
+      --panel-alt: #142438;
+      --text: #e5ebff;
+      --muted: #8ea7c6;
+      --accent: #29d19d;
+      --accent2: #5f74ff;
+      --warning: #f6c24b;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 24px 60px rgba(0,0,0,0.25);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, rgba(41,209,157,0.12), transparent 20%),
+                  radial-gradient(circle at bottom right, rgba(95,116,255,0.12), transparent 15%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .sidebar {
+      background: rgba(12, 18, 30, 0.98);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 20px;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2dd3a7, #4d70ff);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .brand .title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .brand .title strong {
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    .brand .title span {
+      font-size: 0.77rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .sidebar nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: #fff;
+      background: rgba(255,255,255,0.05);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .nav-item .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #29d19d;
+    }
+
+    .sidebar .footer {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+      padding: 16px 14px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .main {
+      display: grid;
+      gap: 22px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .store-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      font-size: 0.95rem;
+      color: #d8e1ff;
+    }
+
+    .store-chip span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #29d19d;
+      box-shadow: 0 0 0 4px rgba(41,209,157,0.12);
+    }
+
+    .main-header {
+      display: grid;
+      gap: 10px;
+      padding: 32px 32px 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .main-header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.4vw, 2.75rem);
+      line-height: 1.05;
+    }
+
+    .main-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, #2dd3a7, #4d70ff);
+      color: #fff;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.05);
+      color: #dbe4ff;
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+      min-height: 170px;
+    }
+
+    .card h3 {
+      margin: 0 0 16px;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .metric .value {
+      font-size: clamp(2.2rem, 3vw, 3rem);
+      margin: 0;
+      letter-spacing: -0.04em;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(41,209,157,0.16);
+      color: #76f8d1;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .stat-text {
+      color: var(--muted);
+      margin-top: 16px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .few {
+      display: grid;
+      gap: 10px;
+    }
+
+    .metric-group {
+      display: grid;
+      gap: 18px;
+    }
+
+    .metric-group .subtext {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .chart-card {
+      display: grid;
+      gap: 18px;
+      grid-column: span 2;
+    }
+
+    .chart-card .chart-header,
+    .mini-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chart-card .chart-header h3,
+    .mini-card h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .chart-card .chart-header span,
+    .mini-card span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .visual {
+      height: 220px;
+      background: linear-gradient(180deg, rgba(25, 47, 74, 0.95), rgba(14, 26, 40, 0.95));
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(93,192,255,0.14), transparent 18%),
+                  radial-gradient(circle at 80% 30%, rgba(46,209,157,0.12), transparent 18%);
+      pointer-events: none;
+    }
+
+    .bars {
+      position: absolute;
+      bottom: 18px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 84%;
+      gap: 12px;
+      z-index: 1;
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 20px;
+      border-radius: 999px 999px 0 0;
+      background: linear-gradient(180deg, #5f74ff 0%, #29d19d 100%);
+      position: relative;
+    }
+
+    .bar span {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #a8c4ff;
+      font-size: 0.72rem;
+      white-space: nowrap;
+      margin-bottom: 8px;
+    }
+
+    .pie-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 220px;
+    }
+
+    .pie-visual {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(
+        rgba(41,209,157,0.9) 0 45%,
+        rgba(95,116,255,0.92) 45% 65%,
+        rgba(127,85,255,0.82) 65% 100%
+      );
+      position: relative;
+    }
+
+    .pie-visual::after {
+      content: "";
+      position: absolute;
+      inset: 30px;
+      border-radius: 50%;
+      background: var(--bg);
+    }
+
+    .pie-meta {
+      flex: 1;
+      display: grid;
+      gap: 14px;
+    }
+
+    .pie-meta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .metric-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-size: 0.94rem;
+    }
+
+    .metric-chip::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #5f74ff;
+    }
+
+    .metric-chip.secondary::before {
+      background: #29d19d;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(46,209,157,0.16);
+      color: #9bfad8;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 1160px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .chart-card,
+      .pie-card {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="icon">A</div>
+        <div class="title">
+          <strong>ATTENTIO</strong>
+          <span>Retail Intelligence</span>
+        </div>
+      </div>
+
+      <nav>
+        <a class="nav-item active" href="#">Dashboard</a>
+        <a class="nav-item" href="#">Stores</a>
+        <a class="nav-item" href="#">Shelves</a>
+        <a class="nav-item" href="#">Live Cameras</a>
+        <a class="nav-item" href="#">Customers</a>
+        <a class="nav-item" href="#">Attention Analytics</a>
+        <a class="nav-item" href="#">Heatmaps</a>
+        <a class="nav-item" href="#">Behavior Analytics</a>
+        <a class="nav-item" href="#">Recommendations <span class="status-pill">AI</span></a>
+        <a class="nav-item" href="#">Reports</a>
+        <a class="nav-item" href="#">Notifications <span class="status-pill">2</span></a>
+        <a class="nav-item" href="#">Settings</a>
+      </nav>
+
+      <div class="footer">
+        <div class="metric-chip">Alex Rivera</div>
+        <div class="metric-chip secondary">alex.rivera@retailmind.ai</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="top-bar">
+        <div class="store-chip"><span></span> Metro Flagship Store (New York)</div>
+        <div class="header-actions">
+          <button class="button secondary">Live AI Feeds (6/7)</button>
+          <button class="button primary">Store Heatmaps</button>
+        </div>
+      </div>
+
+      <section class="main-header">
+        <div>
+          <p style="color: var(--accent); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; margin-bottom: 10px;">Real-time operations engine</p>
+          <h1>Metro Flagship Store Dashboard</h1>
+          <p>742 5th Avenue, NY 10019 • High Precision Spatial Vision Tracking</p>
+        </div>
+        <div class="stats-grid">
+          <div class="card">
+            <div class="metric">
+              <div>
+                <h3>Total Stores</h3>
+                <p class="value">5</p>
+              </div>
+              <div class="badge">+1 New</div>
+            </div>
+            <p class="stat-text">Multi-location sync</p>
+          </div>
+          <div class="card">
+            <div class="metric">
+              <div>
+                <h3>Active Cameras</h3>
+                <p class="value">6 / 7</p>
+              </div>
+              <div class="badge">94.2% Uptime</div>
+            </div>
+            <p class="stat-text">4K Tensor Feeds</p>
+          </div>
+          <div class="card">
+            <div class="metric">
+              <div>
+                <h3>Active Customers</h3>
+                <p class="value">84</p>
+              </div>
+              <div class="badge">+12.4% vs last hr</div>
+            </div>
+            <p class="stat-text">In-Store Spatial Track</p>
+          </div>
+          <div class="card">
+            <div class="metric">
+              <div>
+                <h3>Current Visitors</h3>
+                <p class="value">1,420</p>
+              </div>
+              <div class="badge">+18.5% Today</div>
+            </div>
+            <p class="stat-text">Daily Total Visits</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-grid">
+        <div class="card">
+          <h3>Average Dwell Time</h3>
+          <p class="value">18m 45s</p>
+          <div class="badge">+2.4m avg</div>
+          <p class="stat-text">Shelf Attention Time</p>
+        </div>
+        <div class="card">
+          <h3>Product Pickups</h3>
+          <p class="value">1,840</p>
+          <div class="badge">+14.2%</div>
+          <p class="stat-text">Gaze to Grab Rate</p>
+        </div>
+        <div class="card">
+          <h3>Conversion Rate</h3>
+          <p class="value">24.5%</p>
+          <div class="badge">+3.1%</div>
+          <p class="stat-text">Attention to Purchase</p>
+        </div>
+        <div class="card">
+          <h3>Engagement Score</h3>
+          <p class="value">94 / 100</p>
+          <div class="badge">Top 5% Retail</div>
+          <p class="stat-text">AI Benchmark Index</p>
+        </div>
+      </section>
+
+      <section class="chart-card">
+        <div class="card">
+          <div class="chart-header">
+            <div>
+              <h3>Hourly Visitors & Product Pickups</h3>
+              <p style="margin:6px 0 0; color: var(--muted); font-size: 0.93rem;">Peak hour foot-traffic vs item interactions</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; color: var(--muted); font-size:0.9rem;">
+              <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:#2dd3a7;"></span>Visitors</span>
+              <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:#5f74ff;"></span>Pickups</span>
+            </div>
+          </div>
+          <div class="visual">
+            <div class="bars">
+              <div class="bar" style="height: 68%;"><span>8 AM</span></div>
+              <div class="bar" style="height: 56%;"><span>9 AM</span></div>
+              <div class="bar" style="height: 74%;"><span>10 AM</span></div>
+              <div class="bar" style="height: 92%;"><span>11 AM</span></div>
+              <div class="bar" style="height: 84%;"><span>12 PM</span></div>
+              <div class="bar" style="height: 78%;"><span>1 PM</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="pie-card">
+          <div class="pie-visual"></div>
+          <div class="pie-meta">
+            <div>
+              <h3>Product Attention Distribution</h3>
+              <p>Percentage of total gaze time by department</p>
+            </div>
+            <div class="metric-chip">Apparel</div>
+            <div class="metric-chip secondary">Home Goods</div>
+            <p style="margin-top: 6px; color: var(--muted);">Large departments earn deeper attention from our spatial vision engine, helping merchandisers align product placement to demand.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
