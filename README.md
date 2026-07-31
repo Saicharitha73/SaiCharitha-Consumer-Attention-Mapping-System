@@ -4,7 +4,7 @@ This repository contains a FastAPI backend and a Vite React frontend for consume
 
 ## Local setup
 Architecture 
-                             STORE
+                                STORE
 
                CCTV Cameras (Live Video)
                         │
