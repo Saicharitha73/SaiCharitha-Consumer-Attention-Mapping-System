@@ -6,10 +6,12 @@ from app.services.behavior_engine import BehaviorEngine
 from app.services.heatmap_engine import HeatmapEngine
 from app.services.product_scoring import ProductScoringEngine
 from app.services.recommendation_engine import RecommendationEngine
+from app.services.report_generator import Milestone3ReportGenerator
 
 router = APIRouter()
 
 @router.get("/{video_id}")
+@router.get("/summary/{video_id}")
 def get_retail_intelligence_summary(
     video_id: int,
     db: Session = Depends(get_db)
@@ -46,8 +48,42 @@ def get_retail_intelligence_summary(
         "behavior_patterns": behavior_res["behavior_patterns"],
         "heatmaps": heatmaps_res,
         "product_rankings": product_res.get("product_rankings", []),
-        "recommendations": rec_res
+        "recommendations": rec_res,
+        "is_data_available": True
     }
+
+@router.get("/overview/{video_id}")
+def get_behavior_overview(video_id: int, db: Session = Depends(get_db)):
+    behavior_engine = BehaviorEngine(db)
+    res = behavior_engine.analyze_video_behavior(video_id)
+    return res["shopper_metrics"]
+
+@router.get("/patterns-v2/{video_id}")
+def get_behavior_patterns(video_id: int, db: Session = Depends(get_db)):
+    behavior_engine = BehaviorEngine(db)
+    res = behavior_engine.analyze_video_behavior(video_id)
+    return res["behavior_patterns"]
+
+@router.get("/heatmaps/{video_id}")
+def get_intelligence_heatmaps(video_id: int, db: Session = Depends(get_db)):
+    heatmap_engine = HeatmapEngine(db)
+    return heatmap_engine.generate_heatmaps(video_id)
+
+@router.get("/product-rankings-v2/{video_id}")
+def get_product_rankings(video_id: int, db: Session = Depends(get_db)):
+    product_engine = ProductScoringEngine(db)
+    res = product_engine.compute_product_attractiveness(video_id)
+    return res.get("product_rankings", [])
+
+@router.get("/recommendations-v2/{video_id}")
+def get_recommendations_v2(video_id: int, db: Session = Depends(get_db)):
+    rec_engine = RecommendationEngine(db)
+    return rec_engine.generate_recommendations(video_id)
+
+@router.get("/reports/{video_id}")
+def get_report_v2(video_id: int, db: Session = Depends(get_db)):
+    generator = Milestone3ReportGenerator(db)
+    return generator.generate_full_report(video_id)
 
 @router.get("/zones/{video_id}/analytics")
 def get_zone_analytics(video_id: int, db: Session = Depends(get_db)):
@@ -57,3 +93,4 @@ def get_zone_analytics(video_id: int, db: Session = Depends(get_db)):
     behavior_engine = BehaviorEngine(db)
     res = behavior_engine.analyze_video_behavior(video_id)
     return res["zone_analytics"]
+

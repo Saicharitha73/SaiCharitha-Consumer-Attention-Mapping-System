@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Award, Plus, Edit3, Trash2, CheckCircle2, Zap, Layers, X } from 'lucide-react';
-import TreemapChart from '../../components/charts/TreemapChart';
+import { Sparkles, Award, Plus, Edit3, Trash2, CheckCircle2, Zap, X } from 'lucide-react';
 import { getRecommendations, createRecommendation, updateRecommendation, deleteRecommendation } from '../../services/dataService';
 
 export default function AIRecommendationsPage() {
@@ -142,8 +141,8 @@ export default function AIRecommendationsPage() {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Recommendation Cards List (8 cols) */}
-        <div className="lg:col-span-8 space-y-4">
+        {/* Recommendation Cards List (Full width) */}
+        <div className="lg:col-span-12 space-y-4">
           <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Award className="w-4 h-4 text-purple-400" />
             Active Planogram & Attention Suggestions
@@ -204,18 +203,6 @@ export default function AIRecommendationsPage() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Spatial Footprint Treemap (4 cols) */}
-        <div className="lg:col-span-4 p-6 bg-slate-900/80 border border-slate-800 rounded-2xl space-y-4 backdrop-blur-xl flex flex-col justify-between">
-          <div>
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-blue-400" />
-              Product Attention Treemap
-            </h2>
-            <p className="text-xs text-slate-400">Gaze fixation points per spatial shelf volume</p>
-          </div>
-          <TreemapChart height="340px" />
         </div>
       </div>
 

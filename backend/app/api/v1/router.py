@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from app.api.v1.endpoints import (
     auth, stores, shelves, cameras, products, customers, analytics, heatmaps, reports, notifications,
-    behavior, heatmaps_v2, products_v2, recommendations, intelligence
+    behavior, heatmaps_v2, products_v2, recommendations, intelligence, copilot
 )
 
 api_router = APIRouter()
@@ -23,4 +23,6 @@ api_router.include_router(heatmaps_v2.router, prefix="/heatmaps-v2", tags=["Heat
 api_router.include_router(products_v2.router, prefix="/products-v2", tags=["Product Intelligence"])
 api_router.include_router(recommendations.router, prefix="/recommendations-v2", tags=["Optimization Recommendations"])
 api_router.include_router(intelligence.router, prefix="/intelligence", tags=["Retail Intelligence"])
+api_router.include_router(copilot.router, prefix="/copilot", tags=["AI Copilot"])
+
 

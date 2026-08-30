@@ -67,12 +67,18 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
     else:
         dispatch_res = send_sms_otp(target_clean, code)
 
-    msg = f"Verification OTP code sent to {channel_name}: {target_clean}. Please check your inbox/messages."
+    smtp_active = bool(settings.SMTP_USER and settings.SMTP_PASSWORD)
+    if smtp_active:
+        msg = f"Verification OTP code sent to {channel_name}: {target_clean}. Please check your inbox."
+        demo_code = None
+    else:
+        msg = f"Verification OTP generated for {target_clean}. (SMTP credentials not configured in backend - use demo OTP code below)"
+        demo_code = code
 
     return SendOTPResponse(
         message=msg,
         target=target_clean,
-        demo_otp=None,
+        demo_otp=demo_code,
         expires_in_seconds=600
     )
 
