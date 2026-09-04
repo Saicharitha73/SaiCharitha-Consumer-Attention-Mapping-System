@@ -196,10 +196,32 @@ export default function AIRecommendationsPage() {
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
+                  <button
+                    onClick={() => {
+                      const existingTasks = JSON.parse(localStorage.getItem('worker_assigned_tasks') || '[]');
+                      const newTask = {
+                        id: Date.now(),
+                        title: `Execute: ${rec.title}`,
+                        category: rec.category,
+                        assigned_to: 'Worker Team',
+                        status: 'Pending',
+                        priority: 'High',
+                        due_time: 'Today 18:00',
+                        description: rec.description,
+                        created_at: new Date().toISOString()
+                      };
+                      localStorage.setItem('worker_assigned_tasks', JSON.stringify([newTask, ...existingTasks]));
+                      alert(`Task successfully assigned to Worker team! Task ID: #${newTask.id}`);
+                    }}
+                    className="px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-xl shadow transition"
+                  >
+                    Assign Task to Worker
+                  </button>
                   <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-xs rounded-xl shadow transition">
                     {rec.action}
                   </button>
                 </div>
+
               </div>
             </div>
           ))}

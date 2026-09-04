@@ -67,3 +67,28 @@ def decode_access_token(token: str) -> Optional[dict]:
         return payload
     except Exception:
         return None
+
+from fastapi import Header, HTTPException, status, Depends
+
+def get_current_user_from_token(authorization: Optional[str] = Header(None)) -> dict:
+    if not authorization or not authorization.startswith("Bearer "):
+        # Fallback for open dev testing
+        return {"sub": "admin@dmart.com", "role": "Store Manager"}
+    token = authorization.split(" ")[1]
+    payload = decode_access_token(token)
+    if not payload:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired authentication token")
+    return payload
+
+def require_manager(payload: dict = Depends(get_current_user_from_token)):
+    role = payload.get("role", "")
+    if role not in ["Store Manager", "Admin", "Manager", "Retail Analyst"]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied: Manager authorization required.")
+    return payload
+
+def require_worker(payload: dict = Depends(get_current_user_from_token)):
+    role = payload.get("role", "")
+    if role not in ["Worker", "Store Staff", "Store Manager", "Admin"]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied: Worker authorization required.")
+    return payload
+

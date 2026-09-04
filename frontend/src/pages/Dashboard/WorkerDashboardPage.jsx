@@ -22,8 +22,11 @@ export default function WorkerDashboardPage() {
   const [uploadingTaskId, setUploadingTaskId] = useState(null);
 
   useEffect(() => {
-    setTasks(getTasks());
+    const baseTasks = getTasks();
+    const managerAssigned = JSON.parse(localStorage.getItem('worker_assigned_tasks') || '[]');
+    setTasks([...managerAssigned, ...baseTasks]);
   }, []);
+
 
   // CREATE TASK
   const handleCreateTask = (e) => {

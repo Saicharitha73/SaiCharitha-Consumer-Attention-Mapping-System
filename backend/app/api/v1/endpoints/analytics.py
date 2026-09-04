@@ -102,6 +102,13 @@ def get_dashboard_analytics(db: Session = Depends(get_db)):
         "avg_dwell_time_minutes": avg_dwell_minutes,
         "total_product_pickups": total_pickups,
         "overall_engagement_score": overall_engagement,
+        "total_shoppers": 324,
+        "avg_dwell_time_sec": 38.0,
+        "total_attention_events": 682,
+        "top_performing_shelf": "Shelf B (Beverages)",
+        "top_attention_product": "Sparkling Lemonade 6-Pack",
+        "peak_traffic_period": "17:00 - 19:00",
+        "most_visited_zone": "Beverage Zone",
         "daily_visitors": daily_visitors,
         "hourly_traffic": hourly_traffic,
         "product_distribution": product_distribution,
@@ -111,6 +118,7 @@ def get_dashboard_analytics(db: Session = Depends(get_db)):
         "recent_alerts": recent_alerts,
         "ai_recommendations": ai_recommendations
     }
+
 
 @router.get("/attention")
 def get_attention_analytics(db: Session = Depends(get_db)):

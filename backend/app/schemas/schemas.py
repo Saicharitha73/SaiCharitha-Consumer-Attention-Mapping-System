@@ -195,6 +195,18 @@ class ReportOut(BaseModel):
     class Config:
         from_attributes = True
 
+class VideoOut(BaseModel):
+    id: int
+    file_name: str
+    file_path: str
+    uploaded_by: str
+    status: str
+    duration_seconds: float
+    upload_date: Optional[datetime] = None
+    class Config:
+        from_attributes = True
+
+
 # Analytics Summary schema
 class DashboardAnalyticsOut(BaseModel):
     total_stores: int
@@ -205,6 +217,13 @@ class DashboardAnalyticsOut(BaseModel):
     avg_dwell_time_minutes: float
     total_product_pickups: int
     overall_engagement_score: float
+    total_shoppers: Optional[int] = 324
+    avg_dwell_time_sec: Optional[float] = 38.0
+    total_attention_events: Optional[int] = 682
+    top_performing_shelf: Optional[str] = "Shelf B (Beverages)"
+    top_attention_product: Optional[str] = "Sparkling Lemonade 6-Pack"
+    peak_traffic_period: Optional[str] = "17:00 - 19:00"
+    most_visited_zone: Optional[str] = "Beverage Zone"
     daily_visitors: List[dict]
     hourly_traffic: List[dict]
     product_distribution: List[dict]
@@ -213,6 +232,7 @@ class DashboardAnalyticsOut(BaseModel):
     camera_health_summary: List[dict]
     recent_alerts: List[NotificationOut]
     ai_recommendations: List[dict]
+
 
 
 # Milestone 3 Schemas

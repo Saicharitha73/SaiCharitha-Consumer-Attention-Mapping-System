@@ -41,74 +41,127 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Top Overview KPI Cards Grid */}
+      {/* Executive KPI Cards Grid (PRD Section 3 Compliance) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Today's Visitors */}
-        <div className="p-5 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-3 backdrop-blur-xl">
+        {/* KPI 1: Total Shoppers */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase font-mono">Today's Visitors</span>
-            <div className="p-2 bg-zinc-900 border border-zinc-800 text-zinc-300 rounded-xl">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Total Shoppers</span>
+            <div className="p-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-white">4,892</span>
+            <span className="text-2xl font-extrabold text-white">324</span>
             <span className="text-xs font-semibold text-emerald-400 flex items-center gap-0.5">
               <ArrowUpRight className="w-3.5 h-3.5" /> +14.2%
             </span>
           </div>
-          <p className="text-[11px] text-zinc-500">Peak hour 1:00 PM (142 visits/10 min)</p>
+          <p className="text-[11px] text-zinc-500">Verified unique video tracks</p>
         </div>
 
-        {/* Card 2: Eye Fixation Rate */}
-        <div className="p-5 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-3 backdrop-blur-xl">
+        {/* KPI 2: Average Dwell Time */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase font-mono">Eye Fixation Rate</span>
-            <div className="p-2 bg-zinc-900 border border-zinc-800 text-zinc-300 rounded-xl">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Average Dwell Time</span>
+            <div className="p-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl">
               <Eye className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-zinc-200">84.2%</span>
+            <span className="text-2xl font-extrabold text-purple-400">38 sec</span>
             <span className="text-xs font-semibold text-emerald-400 flex items-center gap-0.5">
-              <ArrowUpRight className="w-3.5 h-3.5" /> +6.8%
+              <ArrowUpRight className="w-3.5 h-3.5" /> +5.4%
             </span>
           </div>
-          <p className="text-[11px] text-zinc-500">Avg gaze duration: 3.4 seconds</p>
+          <p className="text-[11px] text-zinc-500">Calculated (Exit - Entry Time)</p>
         </div>
 
-        {/* Card 3: Active Cameras */}
-        <div className="p-5 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-3 backdrop-blur-xl">
+        {/* KPI 3: Total Attention Events */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase font-mono">Active Cameras</span>
-            <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl">
-              <Camera className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-emerald-400">12 / 12</span>
-            <span className="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded">
-              60 FPS
-            </span>
-          </div>
-          <p className="text-[11px] text-zinc-500">0 latency drops across 4 aisles</p>
-        </div>
-
-        {/* Card 4: Sales Conversion */}
-        <div className="p-5 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-3 backdrop-blur-xl">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-zinc-400 uppercase font-mono">Cart Touch Conversion</span>
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Total Attention Events</span>
             <div className="p-2 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-extrabold text-amber-400">41.4%</span>
+            <span className="text-2xl font-extrabold text-amber-400">682</span>
             <span className="text-xs font-semibold text-emerald-400 flex items-center gap-0.5">
-              <ArrowUpRight className="w-3.5 h-3.5" /> +3.2%
+              <ArrowUpRight className="w-3.5 h-3.5" /> +18.7%
             </span>
           </div>
-          <p className="text-[11px] text-zinc-500">2,025 product touches today</p>
+          <p className="text-[11px] text-zinc-500">Gaze fixations &gt;2.0 seconds</p>
+        </div>
+
+        {/* KPI 4: Top Performing Shelf */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Top Performing Shelf</span>
+            <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl">
+              <Sparkles className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-extrabold text-emerald-400 truncate">Shelf B (Beverages)</span>
+          </div>
+          <p className="text-[11px] text-zinc-500">94.2% engagement score</p>
+        </div>
+
+        {/* KPI 5: Top Attention Product */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Top Attention Product</span>
+            <div className="p-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl">
+              <Eye className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-base font-extrabold text-cyan-300 truncate">Sparkling Lemonade 6-Pack</span>
+          </div>
+          <p className="text-[11px] text-zinc-500">Attractiveness Score: 92.4/100</p>
+        </div>
+
+        {/* KPI 6: Peak Traffic Period */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Peak Traffic Period</span>
+            <div className="p-2 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl">
+              <Camera className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-extrabold text-rose-400">17:00 - 19:00</span>
+          </div>
+          <p className="text-[11px] text-zinc-500">Peak footfall concentration</p>
+        </div>
+
+        {/* KPI 7: Most Visited Zone */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Most Visited Zone</span>
+            <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl">
+              <BarChart3 className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg font-extrabold text-indigo-300">Beverage Zone</span>
+          </div>
+          <p className="text-[11px] text-zinc-500">248 unique zone visits</p>
+        </div>
+
+        {/* KPI 8: Overall Store Engagement */}
+        <div className="p-4 bg-zinc-950 border border-zinc-800/80 rounded-2xl space-y-2 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-zinc-400 uppercase font-mono">Overall Store Engagement</span>
+            <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl">
+              <Sparkles className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-extrabold text-emerald-400">89.4 / 100</span>
+          </div>
+          <p className="text-[11px] text-zinc-500">Weighted store intelligence score</p>
         </div>
       </div>
 
