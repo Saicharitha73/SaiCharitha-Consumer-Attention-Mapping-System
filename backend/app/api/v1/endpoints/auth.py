@@ -15,14 +15,28 @@ router = APIRouter()
 
 @router.post("/login", response_model=Token)
 def login(user_in: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == user_in.email).first()
+    user = db.query(User).filter(User.email == user_in.email.strip().lower()).first()
     if not user or not verify_password(user_in.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password"
         )
     if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(status_code=400, detail="Inactive user account")
+
+    if user_in.expected_role:
+        is_manager_role = user.role in ["Store Manager", "Admin", "Manager", "Retail Analyst", "Marketing Manager"]
+        is_worker_role = user.role in ["Worker", "Store Staff"]
+        if user_in.expected_role == "Manager" and not is_manager_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. This account is registered as a {user.role}, not a Manager."
+            )
+        elif user_in.expected_role == "Worker" and not is_worker_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. This account is registered as a {user.role}, not a Worker."
+            )
     
     access_token = create_access_token(subject=user.email, role=user.role)
     return {
@@ -68,18 +82,12 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
     else:
         dispatch_res = send_sms_otp(target_clean, code)
 
-    smtp_active = bool(settings.SMTP_USER and settings.SMTP_PASSWORD)
-    if smtp_active:
-        msg = f"Verification OTP code sent to {channel_name}: {target_clean}. Please check your inbox."
-        demo_code = None
-    else:
-        msg = f"Verification OTP generated for {target_clean}. (SMTP credentials not configured in backend - use demo OTP code below)"
-        demo_code = code
+    msg = f"Verification OTP code sent to {channel_name}: {target_clean}. Please check your inbox or SMS messages."
 
     return SendOTPResponse(
         message=msg,
         target=target_clean,
-        demo_otp=demo_code,
+        demo_otp=None,
         expires_in_seconds=600
     )
 
@@ -141,6 +149,20 @@ def login_otp(req: OTPLoginRequest, db: Session = Depends(get_db)):
 
     if not user:
         raise HTTPException(status_code=404, detail="No registered account found with this email or phone number.")
+
+    if req.expected_role:
+        is_manager_role = user.role in ["Store Manager", "Admin", "Manager", "Retail Analyst", "Marketing Manager"]
+        is_worker_role = user.role in ["Worker", "Store Staff"]
+        if req.expected_role == "Manager" and not is_manager_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. Account is registered as {user.role}, not Manager."
+            )
+        elif req.expected_role == "Worker" and not is_worker_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. Account is registered as {user.role}, not Worker."
+            )
 
     if "@" in target_clean:
         user.is_email_verified = True

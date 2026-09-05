@@ -43,7 +43,6 @@ export default function OTPVerificationInput({
 
     if (res.success) {
       setOtpSent(true);
-      setVerificationOtp(res.demo_otp);
       setCountdown(60);
       setSuccessMsg(`OTP sent to ${target}`);
     } else {
@@ -110,24 +109,6 @@ export default function OTPVerificationInput({
 
       {otpSent && (
         <div className="space-y-2 bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
-          {verificationOtp && (
-            <div className="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-center justify-between text-[11px] text-amber-300">
-              <span className="flex items-center gap-1.5 font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>Demo Mode OTP:</span>
-              </span>
-              <button
-                type="button"
-                onClick={() => setOtpCode(verificationOtp)}
-                className="px-2 py-0.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 rounded text-amber-200 font-mono font-bold tracking-widest transition"
-                title="Click to auto-fill"
-              >
-                {verificationOtp} (Click to fill)
-              </button>
-            </div>
-          )}
-
-
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <KeyRound className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />

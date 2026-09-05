@@ -40,6 +40,56 @@ with engine.connect() as conn:
         pass
     conn.commit()
 
+# Seed Default Registered Users if not already in Database
+from app.db.session import SessionLocal
+from app.models.domain import User
+from app.core.security import get_password_hash
+
+try:
+    db_session = SessionLocal()
+    default_users = [
+        {
+            "email": "eleanor@retail.com",
+            "full_name": "Eleanor Vance",
+            "role": "Store Manager",
+            "phone": "+1 (555) 019-2834",
+            "password": "password123",
+        },
+        {
+            "email": "sarah.worker@retailstore.com",
+            "full_name": "Sarah Connor",
+            "role": "Worker",
+            "phone": "+1 (555) 019-9988",
+            "password": "password123",
+        },
+        {
+            "email": "admin@dmart.com",
+            "full_name": "Admin User",
+            "role": "Admin",
+            "phone": "+1 (555) 019-0000",
+            "password": "password123",
+        },
+    ]
+    for udata in default_users:
+        existing = db_session.query(User).filter(User.email == udata["email"]).first()
+        if not existing:
+            new_user = User(
+                email=udata["email"],
+                full_name=udata["full_name"],
+                hashed_password=get_password_hash(udata["password"]),
+                role=udata["role"],
+                phone=udata["phone"],
+                is_email_verified=True,
+                is_phone_verified=True,
+                is_active=True,
+            )
+            db_session.add(new_user)
+    db_session.commit()
+    db_session.close()
+except Exception as e:
+    print(f"User seeding notice: {e}")
+
+
 
 
 app = FastAPI(
