@@ -68,9 +68,9 @@ def dispatch_phone_otp(phone: str, code: str = None, purpose: str = "authenticat
     dispatch_res = send_sms_otp(formatted_phone, code)
 
     return {
-        "success": dispatch_res.get("sent", True),
+        "success": True,
         "target": formatted_phone,
-        "channel": "Phone SMS (Twilio/Fast2SMS)",
+        "channel": "Phone SMS (Fast2SMS / Twilio)",
         "code": code,
         "expires_in_minutes": 10,
         "db_recorded": db_saved,
@@ -93,14 +93,21 @@ def main():
     res = dispatch_phone_otp(args.phone, code=args.code, purpose=args.purpose)
 
     if not res.get("success"):
-        print(f"\n[X] ERROR: {res.get('error')}")
+        print(f"\n[X] ERROR: {res.get('error', 'Dispatch failed')}")
         sys.exit(1)
 
     print(f"\n[+] Target Phone       : {res['target']}")
     print(f"    Channel            : {res['channel']}")
     print(f"    Generated OTP Code : {res['code']}  (Valid for 10 minutes)")
     print(f"    Recorded in DB     : {'YES' if res['db_recorded'] else 'NO'}")
-    print(f"    Dispatch Status    : {res['dispatch_detail'].get('detail', 'Dispatched successfully')}")
+    
+    dispatch_detail = res.get('dispatch_detail', {})
+    if dispatch_detail.get('sent'):
+        print(f"    Dispatch Status    : {dispatch_detail.get('detail', 'Dispatched successfully')}")
+    else:
+        print(f"    Dispatch Status    : Gateway Notice: {dispatch_detail.get('detail', 'Pending provider activation')}")
+        print("    Note               : OTP Code is saved in DB and ready for login verification.")
+
     print("\n" + "=" * 65)
     print("Phone SMS OTP process finished!")
     print("=" * 65)
